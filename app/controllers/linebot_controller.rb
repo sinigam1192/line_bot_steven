@@ -6,8 +6,8 @@ class LinebotController < ApplicationController
   def client
     #演算子の自己代入演算子。a が 偽 か 未定義 なら a に xxx を代入する、という意味になります。
     @client ||= Line::Bot::Client.new{|config|
-      config.channel_secret = ENV["チャンネルシークレット"]
-      config.channel_token = ENV["チャンネルトークン"]
+      config.channel_secret = ENV["58b1cb1eeb05f0e3da047d4527d4bab9"]
+      config.channel_token = ENV["6BiosYIhE2yfbxtl30bRto4yoid6XitUN8hVltHHEJqrJWCCryKnbi2JEmH5rfcQTarVbCD1Ww5bTnP8Smc3IjzgIyJ+iwNK7sYwbzOgyilM2noxO3mQzl5eXgUImAKhkBoKldEFGLRhsKGEPsFUnAdB04t89/1O/w1cDnyilFU="]
     }
   end
 
