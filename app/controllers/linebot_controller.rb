@@ -1,38 +1,39 @@
 class LinebotController < ApplicationController
   require 'line/bot'
 
-  protect_from_forgery :expect => [:callback]
+  protect_from_forgery :except => [:callback]
 
   def client
-    #演算子の自己代入演算子。a が 偽 か 未定義 なら a に xxx を代入する、という意味になります。
-    @client ||= Line::Bot::Client.new{|config|
-      config.channel_secret = ENV["58b1cb1eeb05f0e3da047d4527d4bab9"]
-      config.channel_token = ENV["6BiosYIhE2yfbxtl30bRto4yoid6XitUN8hVltHHEJqrJWCCryKnbi2JEmH5rfcQTarVbCD1Ww5bTnP8Smc3IjzgIyJ+iwNK7sYwbzOgyilM2noxO3mQzl5eXgUImAKhkBoKldEFGLRhsKGEPsFUnAdB04t89/1O/w1cDnyilFU="]
+    @client ||= Line::Bot::Client.new { |config|
+      config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
+      config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
     }
   end
 
   def callback
-    body = request.body.head
+    body = request.body.read
 
-    signature = request.env['HTTP_X_LINE_SIGNATERE']
-    unless client.validate_signatere(body, signature)
+    signature = request.env['HTTP_X_LINE_SIGNATURE']
+    unless client.validate_signature(body, signature)
       head :bad_request
     end
 
-    events = client.parse_event_from(body)
+    events = client.parse_events_from(body)
 
-    events.each{ |event|
+    events.each { |event|
       case event
       when Line::Bot::Event::Message
         case event.type
         when Line::Bot::Event::MessageType::Text
-          #LINEから送られてきたメッセージがアンケートと来ているか確認
+          # LINEから送られてきたメッセージが「アンケート」と一致するかチェック
           if event.message['text'].eql?('アンケート')
-            client.reply_message(event['replyToken'], templete)
+            # private内のtemplateメソッドを呼び出します。
+            client.reply_message(event['replyToken'], template)
           end
         end
       end
     }
+
     head :ok
   end
 
