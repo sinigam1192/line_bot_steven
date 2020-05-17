@@ -19,12 +19,13 @@ class LinebotController < ApplicationController
       head :bad_request
     end
 
-    event = client.parse_event_from(body)
+    events = client.parse_event_from(body)
 
-    event.each{ |event|
+    events.each{ |event|
       case event
       when Line::Bot::Event::Message
         case event.type
+        when Line::Bot::Event::MessageType::Text
           #LINEから送られてきたメッセージがアンケートと来ているか確認
           if event.message['text'].eql?('アンケート')
             client.reply_message(event['replyToken'], templete)
