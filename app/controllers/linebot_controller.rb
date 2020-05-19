@@ -28,9 +28,9 @@ class LinebotController < ApplicationController
 
     events.each { |event|
       case event
-      when Line::Bot::Event::Message
+        when Line::Bot::Event::Message
         case event.type
-        when Line::Bot::Event::MessageType::Text
+          when Line::Bot::Event::MessageType::Text
           # LINEから送られてきたメッセージが「アンケート」と一致するかチェック
           if event.message['text'].eql?('セガール')
             # private内のtemplateメソッドを呼び出します。
@@ -46,6 +46,7 @@ class LinebotController < ApplicationController
             client.reply_message(event['replyToken'], template)
           end
         end
+      end
     }
     head :ok
   end
@@ -54,7 +55,7 @@ class LinebotController < ApplicationController
 
   def template
     {
-      type: 'image',
+    type: 'image',
     originalContentUrl: "#{@image}",
     previewImageUrl: "#{@image}"
     }
