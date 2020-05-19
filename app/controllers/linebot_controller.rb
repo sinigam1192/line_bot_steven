@@ -34,6 +34,7 @@ class LinebotController < ApplicationController
           when Line::Bot::Event::MessageType::Text
           # LINEから送られてきたメッセージが「アンケート」と一致するかチェック
           text = event.message['text']
+
           if text.eql?('セガール')
             # private内のtemplateメソッドを呼び出します。
             @image = get_image("https://www.stevensegallery.com/g")
