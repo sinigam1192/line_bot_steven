@@ -9,12 +9,10 @@ class LinebotController < ApplicationController
       config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
       config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
     }
-
-    rich_menu = {
-	     <rich menu content>
-     }
-
-    client.create_rich_menu(rich_menu)
+    #rich_menu = {
+	     #<rich menu content>
+     #}
+    #client.create_rich_menu(rich_menu)
   end
 
 
@@ -49,14 +47,16 @@ class LinebotController < ApplicationController
             client.reply_message(event['replyToken'], template)
 
           elsif text.eql?('マーレイ')
-            #@image = get_image("https://www.fillmurray.com")
-            @image = get_image("https://www.stevensegallery.com/g")
+            @image = get_image("https://www.fillmurray.com")
+            #@image = get_image("https://www.stevensegallery.com/g")
             client.reply_message(event['replyToken'], template)
 
           elsif text.eql?('ニコラス')
-            #@image = get_image("https://www.placecage.com")
-            @image = get_image("https://www.stevensegallery.com/g")
+            @image = get_image("https://www.placecage.com")
+            #@image = get_image("https://www.stevensegallery.com/g")
             client.reply_message(event['replyToken'], template)
+          else
+            client.reply_message(event['replyToken'], template1)
           end
         end
       end
@@ -73,4 +73,12 @@ class LinebotController < ApplicationController
     previewImageUrl: "#{@image}"
     }
   end
+
+  def template1
+    {
+    type: 'text',
+    text: '俺か？ 俺はただのコックだ'
+    }
+  end
 end
+}
