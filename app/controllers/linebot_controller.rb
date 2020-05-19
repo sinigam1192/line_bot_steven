@@ -14,6 +14,7 @@ class LinebotController < ApplicationController
   def get_image(host_url)
     range = (100..500).to_a
     return image = "#{host_url}/#{range.sample}/#{range.sample}"
+    puts image
   end
 
   def callback
@@ -39,11 +40,11 @@ class LinebotController < ApplicationController
             client.reply_message(event['replyToken'], template)
 
           elsif text.eql?('マーレイ')
-            @image = get_iamge("https://www.fillmurray.com")
+            @image = get_image("https://www.fillmurray.com")
             client.reply_message(event['replyToken'], template)
 
           elsif text.eql?('ニコラス')
-            @image = get_iamge("https://www.placecage.com")
+            @image = get_image("https://www.placecage.com")
             client.reply_message(event['replyToken'], template)
           end
         end
