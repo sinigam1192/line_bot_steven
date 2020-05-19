@@ -32,16 +32,17 @@ class LinebotController < ApplicationController
         case event.type
           when Line::Bot::Event::MessageType::Text
           # LINEから送られてきたメッセージが「アンケート」と一致するかチェック
-          if event.message['text'].eql?('セガール')
+          text = event.message['text']
+          if text.eql?('セガール')
             # private内のtemplateメソッドを呼び出します。
             @image = get_image("https://www.stevensegallery.com/g")
             client.reply_message(event['replyToken'], template)
 
-          elsif event.message['text'].eql?('マーレイ')
+          elsif text.eql?('マーレイ')
             @image = get_iamge("https://www.fillmurray.com")
             client.reply_message(event['replyToken'], template)
 
-          elsif event.message['text'].eql?('ニコラス')
+          elsif text.eql?('ニコラス')
             @image = get_iamge("https://www.placecage.com")
             client.reply_message(event['replyToken'], template)
           end
