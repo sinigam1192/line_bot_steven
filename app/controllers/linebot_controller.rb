@@ -1,5 +1,6 @@
 class LinebotController < ApplicationController
   require 'line/bot'
+  require 'open-uri'
 
   protect_from_forgery :except => [:callback]
 
@@ -8,6 +9,11 @@ class LinebotController < ApplicationController
       config.channel_secret = ENV["LINE_CHANNEL_SECRET"]
       config.channel_token = ENV["LINE_CHANNEL_TOKEN"]
     }
+  end
+
+  def get_image(host_url)
+    range = (100..500).to_a
+    return image = "#{host_url}/#{range.sample}/#{range.sample}"
   end
 
   def callback
@@ -26,14 +32,21 @@ class LinebotController < ApplicationController
         case event.type
         when Line::Bot::Event::MessageType::Text
           # LINEから送られてきたメッセージが「アンケート」と一致するかチェック
-          if event.message['text'].eql?('アンケート')
+          if event.message['text'].eql?('セガール')
             # private内のtemplateメソッドを呼び出します。
+            @image = get_image("https://www.stevensegallery.com/g")
+            client.reply_message(event['replyToken'], template)
+
+          elsif event.message['text'].eql?('マーレイ')
+            @image = get_iamge("https://www.fillmurray.com")
+            client.reply_message(event['replyToken'], template)
+
+          elsif event.message['text'].eql?('ニコラス')
+            @image = get_iamge("https://www.placecage.com")
             client.reply_message(event['replyToken'], template)
           end
         end
-      end
     }
-
     head :ok
   end
 
@@ -41,26 +54,9 @@ class LinebotController < ApplicationController
 
   def template
     {
-      "type": "template",
-      "altText": "this is a confirm template",
-      "template": {
-          "type": "confirm",
-          "text": "今日のもくもく会は楽しいですか？",
-          "actions": [
-              {
-                "type": "message",
-                # Botから送られてきたメッセージに表示される文字列です。
-                "label": "楽しい",
-                # ボタンを押した時にBotに送られる文字列です。
-                "text": "楽しい"
-              },
-              {
-                "type": "message",
-                "label": "楽しくない",
-                "text": "楽しくない"
-              }
-          ]
-      }
+      type: 'image',
+    originalContentUrl: "#{@image}",
+    previewImageUrl: "#{@image}"
     }
   end
 end
