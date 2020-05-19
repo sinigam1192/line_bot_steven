@@ -23,6 +23,12 @@ class LinebotController < ApplicationController
     puts image
   end
 
+  def get_iamge(host_url)
+    range = (100..500).to_a
+    return image = "#{host_url}/#{range.sample}/#{range.sample}"
+    puts image
+  end
+
   def callback
     body = request.body.read
 
